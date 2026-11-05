@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>YourCancerLighthouse — Guiding your cancer journey</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --teal: #008f88;
+      --teal-dim: rgba(0,143,136,0.08);
+      --amber: #d97706;
+      --amber-dim: rgba(217,119,6,0.10);
+      --text: #172033;
+      --muted: #64748b;
+      --border: rgba(0,143,136,0.08);
+      --font: 'Sora', sans-serif;
+      --mono: 'DM Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0; opacity: 0.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(255,255,255,0.90);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em;
+      color: var(--text);
+    }
+    .logo span { color: var(--teal); }
+    nav ul { list-style: none; display: flex; gap: 2.4rem; }
+    nav ul a {
+      text-decoration: none; color: var(--muted); font-size: 0.88rem;
+      font-weight: 400; letter-spacing: 0.04em; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    nav ul a:hover { color: var(--teal); }
+    .nav-cta {
+      padding: 0.5rem 1.3rem;
+      border: 1px solid var(--teal);
+      border-radius: 4px;
+      color: var(--teal) !important;
+      font-weight: 600 !important;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--teal-dim) !important; color: var(--teal) !important; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Glow blobs */
+    .blob {
+      position: absolute; border-radius: 50%;
+      filter: blur(80px); pointer-events: none; opacity: 0.18;
+    }
+    .blob-1 { width: 600px; height: 600px; background: var(--teal); top: -150px; left: -200px; animation: drift 14s ease-in-out infinite alternate; }
+    .blob-2 { width: 400px; height: 400px; background: var(--amber); bottom: 0; right: -100px; animation: drift 18s ease-in-out infinite alternate-reverse; }
+    .blob-3 { width: 300px; height: 300px; background: #3a6bff; top: 40%; left: 60%; animation: drift 20s ease-in-out infinite alternate; }
+
+    @keyframes drift {
+      from { transform: translate(0,0) scale(1); }
+      to   { transform: translate(40px, 30px) scale(1.08); }
+    }
+
+    .badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--teal-dim); border: 1px solid var(--border);
+      border-radius: 999px; padding: 0.35rem 1rem;
+      font-family: var(--mono); font-size: 0.78rem; color: var(--teal);
+      letter-spacing: 0.06em; text-transform: uppercase;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.8s ease both;
+    }
+    .badge-dot { width: 6px; height: 6px; background: var(--teal); border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
+
+    h1 {
+      font-size: clamp(2.6rem, 6vw, 5rem);
+      font-weight: 700; line-height: 1.08;
+      letter-spacing: -0.04em;
+      max-width: 800px;
+      animation: fadeUp 0.8s 0.15s ease both;
+    }
+    h1 em { font-style: normal; color: var(--teal); }
+    h1 .amber { color: var(--amber); }
+
+    .hero-sub {
+      margin-top: 1.5rem;
+      font-size: 1.1rem; color: var(--muted); max-width: 540px;
+      line-height: 1.7; font-weight: 300;
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+
+    .hero-actions {
+      margin-top: 2.8rem; display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+      animation: fadeUp 0.8s 0.45s ease both;
+    }
+    .btn-primary {
+      padding: 0.85rem 2.2rem; background: var(--teal); color: #04080f;
+      font-family: var(--font); font-weight: 700; font-size: 0.95rem;
+      border: none; border-radius: 5px; cursor: pointer; letter-spacing: 0.02em;
+      transition: transform 0.18s, box-shadow 0.18s;
+      box-shadow: 0 0 30px rgba(0,212,200,0.25);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 50px rgba(0,212,200,0.45); }
+    .btn-secondary {
+      padding: 0.85rem 2.2rem; background: transparent; color: var(--text);
+      font-family: var(--font); font-weight: 400; font-size: 0.95rem;
+      border: 1px solid rgba(255,255,255,0.15); border-radius: 5px; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--teal); background: var(--teal-dim); }
+
+    /* Stats bar */
+    .stats-bar {
+      margin-top: 5rem; display: flex; gap: 0; flex-wrap: wrap; justify-content: center;
+      border: 1px solid var(--border); border-radius: 8px;
+      background: rgba(8,15,26,0.7); backdrop-filter: blur(10px);
+      overflow: hidden;
+      animation: fadeUp 0.8s 0.6s ease both;
+    }
+    .stat {
+      padding: 1.6rem 3rem; text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .stat:last-child { border-right: none; }
+    .stat-val { font-size: 2.2rem; font-weight: 700; color: var(--teal); letter-spacing: -0.04em; }
+    .stat-label { font-family: var(--mono); font-size: 0.73rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.25rem; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── SECTION BASE ── */
+    section { position: relative; z-index: 1; }
+    .section-inner { max-width: 1100px; margin: 0 auto; padding: 6rem 2rem; }
+    .section-tag {
+      font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--teal); margin-bottom: 0.8rem;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 700;
+      letter-spacing: -0.03em; line-height: 1.15;
+    }
+    .section-title span { color: var(--teal); }
+    .section-sub { margin-top: 1rem; color: var(--muted); font-size: 1.05rem; line-height: 1.7; max-width: 560px; }
+
+    /* ── HOW IT WORKS ── */
+    #how { background: var(--surface); }
+    .steps { margin-top: 4rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 1.5px; background: var(--border); border-radius: 8px; overflow: hidden; }
+    .step {
+      background: var(--surface); padding: 2.5rem 2rem;
+      position: relative; overflow: hidden;
+      transition: background 0.25s;
+    }
+    .step:hover { background: rgba(0,212,200,0.04); }
+    .step-num {
+      font-family: var(--mono); font-size: 0.72rem; color: var(--teal);
+      letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.2rem;
+    }
+    .step-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .step h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.6rem; }
+    .step p { font-size: 0.9rem; color: var(--muted); line-height: 1.65; }
+
+    /* ── FEATURES ── */
+    #features { background: var(--bg); }
+    .features-grid { margin-top: 4rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 1.2rem; }
+    .feature-card {
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 2rem 1.8rem; background: var(--surface);
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+      position: relative; overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--teal), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .feature-card:hover { border-color: rgba(0,212,200,0.45); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,212,200,0.1); }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-icon { font-size: 1.6rem; margin-bottom: 1.2rem; }
+    .feature-card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .feature-card p { font-size: 0.88rem; color: var(--muted); line-height: 1.65; }
+
+    /* ── CLINICAL HIGHLIGHT ── */
+    #clinical {
+      background: linear-gradient(135deg, #f8fafc 0%, #eef8f7 50%, #f8fafc 100%);
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    .clinical-inner {
+      max-width: 1100px; margin: 0 auto; padding: 6rem 2rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+    }
+    .clinical-visual {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 2rem; font-family: var(--mono);
+      font-size: 0.82rem; line-height: 2;
+    }
+    .cv-line { display: flex; justify-content: space-between; gap: 1rem; }
+    .cv-label { color: var(--muted); }
+    .cv-val { color: var(--teal); font-weight: 400; }
+    .cv-val.amber { color: var(--amber); }
+    .cv-header { color: var(--muted); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; border-bottom: 1px solid var(--border); margin-bottom: 1rem; padding-bottom: 0.5rem; }
+    .cv-bar-wrap { margin: 1.2rem 0; }
+    .cv-bar-label { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.4rem; }
+    .cv-bar-track { background: rgba(255,255,255,0.06); border-radius: 2px; height: 6px; overflow: hidden; }
+    .cv-bar-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--teal), #00f5ea); animation: growBar 1.4s ease both; }
+    @keyframes growBar { from { width: 0; } }
+
+    /* ── CTA ── */
+    #cta {
+      background: var(--surface);
+      text-align: center;
+    }
+    #cta .section-inner { padding: 7rem 2rem; }
+    #cta h2 { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700; letter-spacing: -0.03em; max-width: 640px; margin: 0 auto 1.2rem; }
+    #cta h2 span { color: var(--teal); }
+    #cta p { color: var(--muted); font-size: 1.05rem; max-width: 480px; margin: 0 auto 2.5rem; line-height: 1.7; }
+    .email-row { display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; }
+    .email-row input {
+      padding: 0.85rem 1.4rem; border-radius: 5px;
+      border: 1px solid var(--border); background: var(--bg);
+      color: var(--text); font-family: var(--font); font-size: 0.95rem;
+      width: 300px; outline: none; transition: border-color 0.2s;
+    }
+    .email-row input:focus { border-color: var(--teal); }
+    .email-row input::placeholder { color: var(--muted); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 4rem;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+      font-family: var(--mono); font-size: 0.78rem; color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--teal); }
+    .footer-links { display: flex; gap: 2rem; }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      nav ul { display: none; }
+      .clinical-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .stat { padding: 1.2rem 1.8rem; }
+      footer { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Your<span>Cancer<span>Lighthouse</span></div>
+  <ul>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#clinical">Clinical Data</a></li>
+    <li><a href="#cta" class="nav-cta">Request Access</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <div class="badge"><span class="badge-dot"></span> Diagnosis · Treatment · Clinical Trials</div>
+
+  <h1>We are here to help you<br>with <em>All information</em> <span class="amber">You Need</span></h1>
+
+  <p class="hero-sub">OncoPredict combines multi-modality data, clinical notes, and the state-of-the-art AI models to deliver actionable cancer risk predictions, treatment plan optimization, therapeutic outcome measurement, and clinical trial cohort selection.</p>
+
+  <div class="hero-actions">
+    <button class="btn-primary" onclick="document.querySelector('#cta').scrollIntoView({behavior:'smooth'})">Request Early Access</button>
+    <button class="btn-secondary" onclick="document.querySelector('#how').scrollIntoView({behavior:'smooth'})">See How It Works</button>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-val">94.7%</div><div class="stat-label">Prediction Accuracy</div></div>
+    <div class="stat"><div class="stat-val">18+</div><div class="stat-label">Cancer Types</div></div>
+    <div class="stat"><div class="stat-val">2.3×</div><div class="stat-label">Earlier Detection</div></div>
+    <div class="stat"><div class="stat-val">20K+</div><div class="stat-label">Patient Records Trained</div></div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-inner">
+    <p class="section-tag reveal">Process</p>
+    <h2 class="section-title reveal">From Data to <span>Cancer Care</span></h2>
+    <p class="section-sub reveal">A seamless pipeline that transforms raw clinical data into precise, interpretable cancer risk scores.</p>
+
+    <div class="steps reveal">
+      <div class="step">
+        <div class="step-num">Step 01</div>
+        <div class="step-icon">🧬</div>
+        <h3>Data Ingestion</h3>
+        <p>Securely ingest genomic, proteomic, and clinical data via HL7 FHIR-compatible APIs. Works with your existing EHR.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">Step 02</div>
+        <div class="step-icon">⚙️</div>
+        <h3>Multi-Modality Data Fusion</h3>
+        <p>Our proprietary fusion model integrates multi-modal clinical data with population-level epidemiological signals.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">Step 03</div>
+        <div class="step-icon">🤖</div>
+        <h3>AI Risk Scoring</h3>
+        <p>Transformer-based models generate individual risk scores across cancer types, calibrated for diverse populations.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">Step 04</div>
+        <div class="step-icon">📋</div>
+        <h3>Clinical Report</h3>
+        <p>Explainable AI outputs structured for clinician review — SHAP values, confidence intervals, and recommended actions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-inner">
+    <p class="section-tag reveal">Capabilities</p>
+    <h2 class="section-title reveal">Built for <span>Clinical Reality</span></h2>
+    <p class="section-sub reveal">Every feature is designed with oncologists, data scientists, and healthcare systems in mind.</p>
+
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">🔬</div>
+        <h3>Genomic Biomarker Analysis</h3>
+        <p>Detect SNPs, CNVs, and somatic mutations correlated with cancer onset using our curated biomarker library.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🛡️</div>
+        <h3>HIPAA & GDPR Compliant</h3>
+        <p>End-to-end encryption, de-identification pipelines, and audit logs meet the strictest healthcare data regulations.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">📊</div>
+        <h3>Explainable AI (XAI)</h3>
+        <p>Every prediction comes with interpretable feature attributions — so clinicians understand and trust the output.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🔗</div>
+        <h3>EHR Integration</h3>
+        <p>Plug into Epic, Cerner, and other major EHR systems via certified FHIR R4 APIs with zero workflow disruption.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">📈</div>
+        <h3>Population Analytics</h3>
+        <p>Aggregate risk dashboards let health systems identify high-risk cohorts and optimize screening resources.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon">🌐</div>
+        <h3>Federated Learning</h3>
+        <p>Model training across distributed hospital networks — no raw data ever leaves your institution.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLINICAL HIGHLIGHT -->
+<section id="clinical">
+  <div class="clinical-inner">
+    <div class="reveal">
+      <p class="section-tag">Validation</p>
+      <h2 class="section-title">Clinically <span>Validated</span> Results</h2>
+      <p class="section-sub">Validated across three independent hospital networks with 42,000+ patient cohort. OncoPredict outperforms standard screening protocols at every stage.</p>
+      <div style="margin-top:2rem; display:flex; flex-direction:column; gap:0.8rem;">
+        <div style="display:flex;align-items:center;gap:0.8rem;font-size:0.88rem;color:var(--muted);">
+          <span style="color:var(--teal);font-size:1rem;">✓</span> Publications <em style="color:var(--text);">Pending</em> (2027)
+        </div>
+        <div style="display:flex;align-items:center;gap:0.8rem;font-size:0.88rem;color:var(--muted);">
+          <span style="color:var(--teal);font-size:1rem;">✓</span> FDA regulatory paths: under consideration
+        </div>
+        <div style="display:flex;align-items:center;gap:0.8rem;font-size:0.88rem;color:var(--muted);">
+          <span style="color:var(--teal);font-size:1rem;">✓</span> Provisional IP application: under consideration
+        </div>
+      </div>
+    </div>
+    <div class="clinical-visual reveal">
+      <div class="cv-header">Model Performance Report · v2.4</div>
+      <div class="cv-line"><span class="cv-label">AUC-ROC Score</span><span class="cv-val">0.973</span></div>
+      <div class="cv-line"><span class="cv-label">Sensitivity</span><span class="cv-val">94.7%</span></div>
+      <div class="cv-line"><span class="cv-label">Specificity</span><span class="cv-val">91.2%</span></div>
+      <div class="cv-line"><span class="cv-label">PPV</span><span class="cv-val">89.5%</span></div>
+      <div class="cv-line"><span class="cv-label">Lead Time</span><span class="cv-val amber">+2.3 years</span></div>
+      <div class="cv-bar-wrap">
+        <div class="cv-bar-label"><span style="color:var(--muted)">Breast</span><span style="color:var(--teal)">96.1%</span></div>
+        <div class="cv-bar-track"><div class="cv-bar-fill" style="width:96.1%"></div></div>
+      </div>
+      <div class="cv-bar-wrap">
+        <div class="cv-bar-label"><span style="color:var(--muted)">Lung</span><span style="color:var(--teal)">93.4%</span></div>
+        <div class="cv-bar-track"><div class="cv-bar-fill" style="width:93.4%"></div></div>
+      </div>
+      <div class="cv-bar-wrap">
+        <div class="cv-bar-label"><span style="color:var(--muted)">Colorectal</span><span style="color:var(--teal)">91.8%</span></div>
+        <div class="cv-bar-track"><div class="cv-bar-fill" style="width:91.8%"></div></div>
+      </div>
+      <div class="cv-bar-wrap">
+        <div class="cv-bar-label"><span style="color:var(--muted)">Pancreatic</span><span style="color:var(--teal)">88.2%</span></div>
+        <div class="cv-bar-track"><div class="cv-bar-fill" style="width:88.2%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="section-inner">
+    <h2 class="reveal">Ready to transform<br><span> precision cancer care?</span></h2>
+    <p class="reveal">Join leading oncology centers in the OncoPredict early access program. Limited seats available for Q2 2027.</p>
+    <div class="email-row reveal">
+      <input type="email" placeholder="your@institution.edu" />
+      <button class="btn-primary">Request Access</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo" style="font-size:1rem;">Onco<span style="color:var(--teal)">Predict</span></div>
+  <div class="footer-links">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Contact</a>
+    <a href="#">Research</a>
+  </div>
+  <div>© 2026 OncoPredict, Inc. All rights reserved.</div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => obs.observe(el));
+
+  // Stagger children of grid parents
+  document.querySelectorAll('.features-grid, .steps').forEach(parent => {
+    [...parent.querySelectorAll('.reveal')].forEach((el, i) => {
+      el.style.transitionDelay = `${i * 0.1}s`;
+    });
+  });
+</script>
+</body>
+</html>
