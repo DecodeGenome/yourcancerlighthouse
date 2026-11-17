@@ -1,0 +1,182 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cancer Lighthouse — Coming Soon</title>
+<meta name="description" content="Cancer Lighthouse is under construction.">
+
+<style>
+:root{
+  --navy:#06182d;
+  --blue:#0b5ca8;
+  --sky:#dceeff;
+  --ink:#17324b;
+  --muted:#667b8e;
+  --gold:#f5bd57;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+
+
+  body{
+    margin:0;
+    background:linear-gradient(
+      180deg,
+      #c9eaff 0%,
+      #e0f3ff 48%,
+      #f2f9ff 100%
+    );
+  color:var(--ink);
+  font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  min-height:100vh;
+}
+
+.page{
+  width:min(1180px,92vw);
+  margin:auto;
+  padding:28px 0 34px;
+}
+
+.hero{
+  text-align:center;
+  padding:30px 0 0;
+}
+
+.eyebrow{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:clamp(30px,4vw,48px);  /* first sentance*/
+  line-height:1.35;
+  letter-spacing:.01em;
+  font-weight:500;
+  color:#4f7f9f;
+  text-transform:none;
+}
+
+.eyebrow + .eyebrow{
+  margin-top:5px;
+  font-size:clamp(20px,2.4vw,29px); /* scond sentence */
+  font-style:italic;
+  color:#2f8f83;
+
+  white-space:nowrap;
+
+    /* left → right → disappear → repeat */
+  animation:moveAcross 15s linear infinite;
+
+}
+
+@keyframes moveAcross{
+  /* Start a little before "We're building..." */
+  0%{
+    transform:translateX(-220px);
+    opacity:0;
+  }
+
+  /* Quickly appear */
+  8%{
+    opacity:1;
+  }
+
+  /* Travel across */
+  88%{
+    opacity:1;
+  }
+
+  /* Start disappearing around the end of "...exciting..." */
+  100%{
+    transform:translateX(220px);
+    opacity:0;
+  }
+}
+
+
+.scene{
+  position:relative;
+  width:min(520px,90vw);
+
+  /* Move the animation farther down */
+  margin:60px auto 12px;
+}
+
+.scene:before{
+  content:"";
+  position:absolute;
+  inset:18% 10% 4%;
+  background:radial-gradient(
+    ellipse at center,
+    rgba(105,187,255,.20),
+    transparent 67%
+  );
+  filter:blur(12px);
+  z-index:0;
+}
+
+.scene img{
+  position:relative;
+  z-index:1;
+  width:100%;
+  height:auto;
+  display:block;
+  border-radius:28px;
+  mix-blend-mode:multiply;
+}
+
+.footer{
+  text-align:center;
+  margin-top:25px;
+  color:#a0aebb;
+  font-size:11px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+@media(max-width:700px){
+  .page{
+    padding-top:16px;
+  }
+
+  .hero{
+    padding-top:24px;
+  }
+
+  .scene{
+    margin-top:42px;
+    width:min(430px,96vw);
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<main class="page">
+
+  <section class="hero">
+
+    <div class="eyebrow">
+      We're building something exciting...
+    </div>
+
+    <div class="eyebrow">
+      stay tuned — we'll be lighting the way soon ✨
+    </div>
+
+    <div class="scene">
+      <img
+        src="construction_animation.gif"
+        alt="Animated construction worker building webpages on a laptop"
+      >
+    </div>
+
+  </section>
+
+</main>
+
+</body>
+</html>
